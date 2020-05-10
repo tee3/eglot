@@ -96,6 +96,7 @@
 
 (defvar eglot-server-programs '((rust-mode . (eglot-rls "rls"))
                                 (python-mode . ("pyls"))
+                                ((json-mode jsonc-mode) . eglot--vscode-json-languageserver-contact)
                                 ((js-mode
                                   typescript-mode)
                                  . ("javascript-typescript-stdio"))
@@ -2724,6 +2725,29 @@ If INTERACTIVE, prompt user for details."
   ((_server eglot-eclipse-jdt) (_cmd (eql java.apply.workspaceEdit)) arguments)
   "Eclipse JDT breaks spec and replies with edits as arguments."
   (mapc #'eglot--apply-workspace-edit arguments))
+
+
+;;; vscode-json-languageserver-specific
+;;;
+(defclass eglot-vscode-json-languageserver (eglot-lsp-server) ()
+  :documentation "VSCode JSON Language Server.")
+
+(cl-defmethod eglot-initialization-options ((server eglot-vscode-json-languageserver))
+  "Passes through required \"eglot-vscode-json-languageserver\" SERVER initialization options."
+  `(:provideFormatter t))
+
+(defun eglot--vscode-json-languageserver-contact (interactive)
+  "Return a contact for connecting to vscode-json-languageserver.
+If INTERACTIVE, prompt user for details if not found."
+  (cl-labels ()
+    (let* ((s0 (executable-find "vscode-json-languageserver"))
+           (s1 (if s0
+                   s0
+                 (and interactive
+                      (read-shell-command
+                       "Enter program to execute for: "
+                       "vscode-json-languageserver")))))
+      (cons 'eglot-vscode-json-languageserver (list s1 "--stdio")))))
 
 (provide 'eglot)
 ;;; eglot.el ends here
