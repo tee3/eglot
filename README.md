@@ -47,6 +47,7 @@ for the language you're using. Otherwise, it prompts you to enter one.
 * Scala's [metals][metals]
 * TeX/LaTeX's [Digestif][digestif]
 * Godot Engine's [built-in LSP][godot]
+* HTML's [vscode-html-languageserver][vscode-html-languageserver]
 
 I'll add to this list as I test more servers. In the meantime you can
 customize `eglot-server-programs`:
@@ -531,3 +532,4 @@ Under the hood:
 [yasnippet]: http://elpa.gnu.org/packages/yasnippet.html
 [markdown]: https://github.com/defunkt/markdown-mode
 [godot]: https://godotengine.org
+[vscode-html-languageserver]: https://github.com/vscode-langservers/vscode-html-languageserver-bin

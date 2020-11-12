@@ -122,7 +122,8 @@ language-server/bin/php-language-server.php"))
                                 ((tex-mode context-mode texinfo-mode bibtex-mode)
                                  . ("digestif"))
                                 (erlang-mode . ("erlang_ls" "--transport" "stdio"))
-                                (gdscript-mode . ("localhost" 6008)))
+                                (gdscript-mode . ("localhost" 6008))
+                                (html-mode . eglot--html-languageserver-contact))
   "How the command `eglot' guesses the server to start.
 An association list of (MAJOR-MODE . CONTACT) pairs.  MAJOR-MODE
 is a mode symbol, or a list of mode symbols.  The associated
@@ -2724,6 +2725,29 @@ If INTERACTIVE, prompt user for details."
   ((_server eglot-eclipse-jdt) (_cmd (eql java.apply.workspaceEdit)) arguments)
   "Eclipse JDT breaks spec and replies with edits as arguments."
   (mapc #'eglot--apply-workspace-edit arguments))
+
+
+;;; html-languageserver-specific
+;;;
+(defclass eglot-html-languageserver (eglot-lsp-server) ()
+  :documentation "A custom class for the HTML language server.")
+
+(cl-defmethod eglot-initialization-options ((server eglot-html-languageserver))
+  "Passes through required initialization options to SERVER EGLOT-HTML-LANGUAGESERVER."
+  `())
+
+(defun eglot--html-languageserver-contact (interactive)
+  "Return a contact for connecting to html-languageserver.
+If INTERACTIVE, prompt user for details if not found."
+  (cl-labels ()
+    (let* ((s0 (executable-find "html-languageserver"))
+           (s1 (if s0
+                   s0
+                 (and interactive
+                      (read-shell-command
+                       "Enter program to execute for: "
+                       "html-languageserver")))))
+      (cons 'eglot-html-languageserver (list s1 "--stdio")))))
 
 (provide 'eglot)
 ;;; eglot.el ends here

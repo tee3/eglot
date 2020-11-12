@@ -1,5 +1,7 @@
 # 1.7 (upcoming)
 
+##### Add support for the VSCode HTML language server
+
 ##### Support hierarchical symbols in Imenu ([#303][github#303])
 
 Thanks to Ingo Lohmar for the original implementation.
